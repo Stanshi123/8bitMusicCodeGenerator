@@ -1,11 +1,13 @@
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class EightBitMusicCodeGenerator {
 
     // Frequencies for notes in C4
     private static final short C4_frequency[] = {262, 277, 294, 311, 330, 349, 370, 392, 415, 440, 466, 494};
+    private static final int supportedDuration[] = {1,2,4,8,16};
     private static PrintWriter pw = null;
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
@@ -22,27 +24,37 @@ public class EightBitMusicCodeGenerator {
                         +"\n\t16 -- 16th note\n\t 8 -- 8th note\n\t 4 -- quater note\n\t 2 -- half note\n\t 1 -- whole note");
                 String inputLine = scan.nextLine();
                 String [] inputs = inputLine.split(" ");
-                if (inputs.length == 1)
-                {
-                    if (inputs[0].equals("q")) {
-                        break;
-                    } else {
-                        System.out.println("Wrong input");
+                try {
+                    if (inputs.length == 1) {
+                        if (inputs[0].equals("q")) {
+                            break;
+                        } else {
+                            System.out.println("Wrong input - Invalid input");
+                            continue;
+                        }
+                    } else if (inputs.length == 0) {
+                        System.out.println("Wrong input - Nothing entered");
+                        continue;
+                    } else if (inputs.length > 2) {
+                        System.out.println("Wrong input - Too Many things Entered");
+                    }
+                    int duration = Integer.parseInt(inputs[0]);
+                    boolean contains = IntStream.of(supportedDuration).anyMatch(x -> x == duration);
+                    if (!contains) {
+                        System.out.println("Wrong input - Duration not valid");
                         continue;
                     }
-                } else if (inputs.length == 0) {
-                    System.out.println("Wrong input");
-                    continue;
+                    printNote(duration, inputs[1]);
+                } catch (NumberFormatException ne) {
+                    System.out.println("Wrong input - Number cannot be parsed.");
+                } catch (Exception e) {
+                    System.out.println("Wrong input - Format not correct");
                 }
-                int duration = Integer.parseInt(inputs[0]);
-                printNote(duration,inputs[1]);
 
             }
 
         } catch (FileNotFoundException fne) {
             fne.printStackTrace();
-        } catch (Exception e) {
-            System.out.println("Error input!");;
         }
 
         pw.println("}");
@@ -104,26 +116,31 @@ public class EightBitMusicCodeGenerator {
     private static void printWholeNote(String noteName) throws Exception{
         int frequency = getNoteFrequency(noteName);
         pw.println("\tplay_whole_note(" + frequency + ");");
+        pw.println("\t_delay_ms(10);");
     }
 
     private static void printHalfNote(String noteName) throws Exception {
         int frequency = getNoteFrequency(noteName);
-        pw.println("\tplay_Half_note(" + frequency + ");");
+        pw.println("\tplay_half_note(" + frequency + ");");
+        pw.println("\t_delay_ms(10);");
     }
 
     private static void printQuarterNote(String noteName) throws Exception{
         int frequency = getNoteFrequency(noteName);
-        pw.println("\tplay_Quarter_note(" + frequency + ");");
+        pw.println("\tplay_quarter_note(" + frequency + ");");
+        pw.println("\t_delay_ms(10);");
     }
 
     private static void printEighthNote(String noteName) throws Exception {
         int frequency = getNoteFrequency(noteName);
-        pw.println("\tplay_EighthNote_note(" + frequency + ");");
+        pw.println("\tplay_eighthNote_note(" + frequency + ");");
+        pw.println("\t_delay_ms(10);");
     }
 
     private static void printSixteenthNote(String noteName) throws Exception {
         int frequency = getNoteFrequency(noteName);
-        pw.println("\tplay_Sixteenth_note(" + frequency + ");");
+        pw.println("\tplay_sixteenth_note(" + frequency + ");");
+        pw.println("\t_delay_ms(10);");
     }
 
     private static int getNoteFrequency(String noteName) throws Exception {

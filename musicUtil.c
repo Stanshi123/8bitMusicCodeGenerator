@@ -1,8 +1,4 @@
-#include <arv/io.h>
-#include <util/delay.h>
-#include <stduio.h>
-
-#include "musciUtil.h"
+#include "musicUtil.h"
 
 
 /*
