@@ -56,7 +56,7 @@ public class EightBitMusicCodeGenerator {
         } catch (FileNotFoundException fne) {
             fne.printStackTrace();
         }
-
+        pw.println("\treturn 0;");
         pw.println("}");
 
         if (pw != null) {
