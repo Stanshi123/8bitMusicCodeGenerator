@@ -29,13 +29,13 @@ void play_eighth_note(unsigned short freq){
     play_sixteenth_note(freq);
 }
 
-void play_quater_note(unsigned short freq){
+void play_quarter_note(unsigned short freq){
     play_eighth_note(freq);
     play_eighth_note(freq);
 }
 void play_half_note(unsigned short freq) {
-    play_quater_note(freq);
-    play_quater_note(freq);
+    play_quarter_note(freq);
+    play_quarter_note(freq);
 }
 void play_whole_note(unsigned short freq){
     play_half_note(freq);

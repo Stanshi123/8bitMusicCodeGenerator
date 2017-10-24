@@ -18,10 +18,14 @@ public class EightBitMusicCodeGenerator {
             init();
             spashScreen();
             scan.nextLine();
+            int currentDuration = 0;
+            System.out.println("Type next note in the format of note duration note name (type q to quit)"
+                    +"\n\t16 -- 16th note\n\t 8 -- 8th note\n\t 4 -- quarter note\n\t 2 -- half note\n\t 1 -- whole note"
+                    +"\n\tIf duration is the same as the previous one, just the note name is needed"
+                    +"\n\tRest is R"
+                    +"\n\tExample: 16 C#3 or 8 C4 or 4 Cb3 or 2 R or D4"
+            );
             while (true) {
-                System.out.println("Type next note in the format of note duration note name (type q to quit)"
-                        +"\n\tExample: 16 C#3 or 8 C4 or 4 Cb3"
-                        +"\n\t16 -- 16th note\n\t 8 -- 8th note\n\t 4 -- quater note\n\t 2 -- half note\n\t 1 -- whole note");
                 String inputLine = scan.nextLine();
                 String [] inputs = inputLine.split(" ");
                 try {
@@ -29,7 +33,7 @@ public class EightBitMusicCodeGenerator {
                         if (inputs[0].equals("q")) {
                             break;
                         } else {
-                            System.out.println("Wrong input - Invalid input");
+                            printNote(currentDuration,inputs[0]);
                             continue;
                         }
                     } else if (inputs.length == 0) {
@@ -44,7 +48,8 @@ public class EightBitMusicCodeGenerator {
                         System.out.println("Wrong input - Duration not valid");
                         continue;
                     }
-                    printNote(duration, inputs[1]);
+                    currentDuration = duration;
+                    printNote(currentDuration, inputs[1]);
                 } catch (NumberFormatException ne) {
                     System.out.println("Wrong input - Number cannot be parsed.");
                 } catch (Exception e) {
@@ -70,8 +75,6 @@ public class EightBitMusicCodeGenerator {
         pw.println("#include <util/delay.h>");
         pw.println("#include \"lcd.h\"");
         pw.println("#include \"musicUtil.h\"");
-        pw.println("// Frequencies for notes in C4 \n const unsigned short C4_frequency[12] =" +
-                " { 262, 277, 294, 311, 330, 349, 370, 392, 415, 440, 466, 494};");
         pw.println("int main(void) {");
         pw.println("\t// Initialize DDR and PORT registers and LCD\n" +
                 "\tDDRC = 0x00;\n" +
@@ -115,32 +118,52 @@ public class EightBitMusicCodeGenerator {
 
     private static void printWholeNote(String noteName) throws Exception{
         int frequency = getNoteFrequency(noteName);
-        pw.println("\tplay_whole_note(" + frequency + ");");
-        pw.println("\t_delay_ms(10);");
+        if (frequency != 0) {
+            pw.println("\tplay_whole_note(" + frequency + ");");
+            pw.println("\t_delay_ms(10);");
+        } else {
+            pw.println("\t_delay_ms(4010);");
+        }
     }
 
     private static void printHalfNote(String noteName) throws Exception {
         int frequency = getNoteFrequency(noteName);
-        pw.println("\tplay_half_note(" + frequency + ");");
-        pw.println("\t_delay_ms(10);");
+        if (frequency != 0) {
+            pw.println("\tplay_half_note(" + frequency + ");");
+            pw.println("\t_delay_ms(10);");
+        } else {
+            pw.println("\t_delay_ms(2010);");
+        }
     }
 
     private static void printQuarterNote(String noteName) throws Exception{
         int frequency = getNoteFrequency(noteName);
-        pw.println("\tplay_quarter_note(" + frequency + ");");
-        pw.println("\t_delay_ms(10);");
+        if (frequency!= 0) {
+            pw.println("\tplay_quarter_note(" + frequency + ");");
+            pw.println("\t_delay_ms(10);");
+        } else {
+            pw.println("\t_delay_ms(1010);");
+        }
     }
 
     private static void printEighthNote(String noteName) throws Exception {
         int frequency = getNoteFrequency(noteName);
-        pw.println("\tplay_eighthNote_note(" + frequency + ");");
-        pw.println("\t_delay_ms(10);");
+        if (frequency != 0) {
+            pw.println("\tplay_eighth_note(" + frequency + ");");
+            pw.println("\t_delay_ms(10);");
+        } else {
+            pw.println("\t_delay_ms(510);");
+        }
     }
 
     private static void printSixteenthNote(String noteName) throws Exception {
         int frequency = getNoteFrequency(noteName);
-        pw.println("\tplay_sixteenth_note(" + frequency + ");");
-        pw.println("\t_delay_ms(10);");
+        if (frequency != 0) {
+            pw.println("\tplay_sixteenth_note(" + frequency + ");");
+            pw.println("\t_delay_ms(10);");
+        } else {
+            pw.println("\t_delay_ms(260);");
+        }
     }
 
     private static int getNoteFrequency(String noteName) throws Exception {
@@ -183,6 +206,8 @@ public class EightBitMusicCodeGenerator {
                 return (int) Math.floor(C4_frequency[roundTo12(flag,11)] * multiplier);
             case 'C':
                 return (int) Math.floor(C4_frequency[roundTo12(flag,0)] * multiplier);
+            case 'R':
+                return 0;
             default:
                 throw new Exception();
         }
