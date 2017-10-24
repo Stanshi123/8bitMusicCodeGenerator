@@ -8,6 +8,16 @@ public class Music {
     private String tone;
     private String timeSignature;
 
+    public Music(String name, String tone, String timeSignature) {
+        this.name = name;
+        this.tone = tone;
+        this.timeSignature = timeSignature;
+    }
+
+    public void addNote(Note note){
+        
+    }
+
     public List<Bar> getBars() {
         return bars;
     }
@@ -39,4 +49,5 @@ public class Music {
     public void setTimeSignature(String timeSignature) {
         this.timeSignature = timeSignature;
     }
+
 }

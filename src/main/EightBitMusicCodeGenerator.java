@@ -1,5 +1,7 @@
 package main;
 
+import objects.Music;
+
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -15,6 +17,11 @@ public class EightBitMusicCodeGenerator {
         Scanner scan = new Scanner(System.in);
         System.out.println("Type the music name:");
         String musicName = scan.next();
+        System.out.println("Type the music tone:");
+        String tone = scan.next();
+        System.out.println("Type the time signature:");
+        String timeSignature = scan.next();
+        Music music = new Music(musicName,tone,timeSignature);
         try {
             pw = new PrintWriter(musicName + ".c");
             init();
