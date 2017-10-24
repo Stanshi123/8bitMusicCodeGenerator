@@ -168,6 +168,9 @@ public class EightBitMusicCodeGenerator {
 
     private static int getNoteFrequency(String noteName) throws Exception {
         char name = noteName.charAt(0);
+        if (noteName.length() == 1 && name == 'R') {
+            return 0;
+        }
         int flag = 0;
         int high;
         if (noteName.charAt(1) == 'b') {
@@ -206,8 +209,6 @@ public class EightBitMusicCodeGenerator {
                 return (int) Math.floor(C4_frequency[roundTo12(flag,11)] * multiplier);
             case 'C':
                 return (int) Math.floor(C4_frequency[roundTo12(flag,0)] * multiplier);
-            case 'R':
-                return 0;
             default:
                 throw new Exception();
         }
