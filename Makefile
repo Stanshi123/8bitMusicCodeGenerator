@@ -1,7 +1,8 @@
 DEVICE     = atmega328p
 CLOCK      = 16000000
 PROGRAMMER = -c arduino -b 115200 -P /dev/tty.usbmodem*
-OBJECTS    = $(wildcard *.c)
+SRCS       = $(wildcard *.c)
+OBJECTS    = $(SRCS:.c=.o)
 FUSES      = -U hfuse:w:0xde:m -U lfuse:w:0xff:m -U efuse:w:0x05:m
 
 # Tune the lines below only if you know what you are doing:
@@ -39,7 +40,7 @@ load: all
 	bootloadHID main.hex
 
 clean:
-	rm -f main.hex main.elf *o
+	rm -f main.hex main.elf $(OBJECTS)
 
 # file targets:
 main.elf: $(OBJECTS)
