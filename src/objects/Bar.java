@@ -61,6 +61,7 @@ public class Bar {
         if (parsedTimeSignature.length != 2) {
             throw new ParseException("Bar.java",62);
         }
+        
 
     }
 
