@@ -18,10 +18,7 @@ public class Bar {
         this.notes = notes;
     }
 
-    public List<Note> getNotes() {
-
-        return notes;
-    }
+    public List<Note> getNotes() { return notes; }
 
     public void setNotes(List<Note> notes) {
         this.notes = notes;
@@ -55,7 +52,7 @@ public class Bar {
     // There are A number of B notes in the bar/measure
     // eg. 3/4 is 3 quarter-notes per bar
     //     4/4 is 4 quarter-notes per bar
-    public Pair<Integer,Integer> parseTimeSignature () throws ParseException {
+    private Pair<Integer,Integer> parseTimeSignature() throws ParseException {
         int noteType = 0, numberOfNotes = 0;
         String[] parsedTimeSignature = timeSignature.split("/");
         if (parsedTimeSignature.length != 2) {
@@ -71,22 +68,34 @@ public class Bar {
         }
     }
 
+    public double getDuration() throws ParseException{
+        double duration = 0;
+        for (Note note : notes) {
+            duration += note.getDuration();
+        }
+        return duration;
+    }
+
+    /*
+        Whole Note: Represents by number  1 -- Takes 4 beats
+         Half Note: Represents by number  2 -- Takes 2 beats
+      Quarter Note: Represents by number  4 -- Takes 1 beat
+       Eighth Note: Represents by number  8 -- Takes 1/2 beat
+    Sixteenth Note: Represents by number 16 -- Takes 1/4 beat
+    */
+    
     public boolean hasMoreRoom() throws ParseException{
         int numberOfNotes = parseTimeSignature().getKey();
         int noteType = parseTimeSignature().getValue();
-        /*
-            Whole Note: Represents by number  1 -- Takes 4 beats
-             Half Note: Represents by number  2 -- Takes 2 beats
-          Quarter Note: Represents by number  4 -- Takes 1 beat
-           Eighth Note: Represents by number  8 -- Takes 1/2 beat
-        Sixteenth Note: Represents by number 16 -- Takes 1/4 beat
-         */
-        double barDuration = noteType *
-        /*
-        for (Note note : notes) {
+        double barDuration = (4.0 / noteType) * numberOfNotes;
+        return getDuration() < barDuration;
+    }
 
-        }
-        */
-        return false;
+    // Check if the beats exceeds the maximum amount
+    public boolean exceedsBarDuration() throws ParseException{
+        int numberOfNotes = parseTimeSignature().getKey();
+        int noteType = parseTimeSignature().getValue();
+        double barDuration = (4.0 / noteType) * numberOfNotes;
+        return getDuration() > barDuration;
     }
 }

@@ -14,7 +14,7 @@ public class Music {
         this.timeSignature = timeSignature;
     }
 
-    public void addNote(Note note){
+    public void addNote(Note note) {
         
     }
 
