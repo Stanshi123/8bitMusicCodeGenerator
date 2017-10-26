@@ -56,21 +56,37 @@ public class Bar {
     // eg. 3/4 is 3 quarter-notes per bar
     //     4/4 is 4 quarter-notes per bar
     public Pair<Integer,Integer> parseTimeSignature () throws ParseException {
-        int noteType, numberOfNote;
+        int noteType = 0, numberOfNotes = 0;
         String[] parsedTimeSignature = timeSignature.split("/");
         if (parsedTimeSignature.length != 2) {
             throw new ParseException("Bar.java",62);
+        } else {
+            try {
+                numberOfNotes = Integer.parseInt(parsedTimeSignature[0]);
+                noteType = Integer.parseInt(parsedTimeSignature[1]);
+            } catch (NumberFormatException ne) {
+                System.out.println("Error - Time signature not an integer");
+            }
+            return new Pair<>(numberOfNotes, noteType);
         }
-        
-
     }
 
-    public boolean hasMoreRoom() {
-        int durationForTheBar;
+    public boolean hasMoreRoom() throws ParseException{
+        int numberOfNotes = parseTimeSignature().getKey();
+        int noteType = parseTimeSignature().getValue();
+        /*
+            Whole Note: Represents by number  1 -- Takes 4 beats
+             Half Note: Represents by number  2 -- Takes 2 beats
+          Quarter Note: Represents by number  4 -- Takes 1 beat
+           Eighth Note: Represents by number  8 -- Takes 1/2 beat
+        Sixteenth Note: Represents by number 16 -- Takes 1/4 beat
+         */
+        double barDuration = noteType *
+        /*
         for (Note note : notes) {
 
         }
-
+        */
         return false;
     }
 }
